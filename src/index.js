@@ -8,13 +8,15 @@ const io = socketio(server);
 
 let count = 0;
 
+const welcomeMsg = "Welcome!";
+
 io.on("connection", (socket) => {
   console.log("New web socket connection");
 
-  socket.emit("countUpdated", count);
-  socket.on("increment", () => {
-    count++;
-    io.emit("countUpdated", count);
+  //socket.emit("welcomeMessage", welcomeMsg)
+
+  socket.on("textMessage", (message) => {
+    io.emit("text", message);
   });
 });
 
