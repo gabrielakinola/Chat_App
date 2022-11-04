@@ -11,9 +11,12 @@ const messageTemplate = document.querySelector("#message-template").innerHTML;
 
 const locationTemplate = document.querySelector("#location-template").innerHTML;
 
-const { username, room } = Qs.parse(location.search, {
+let { username, room } = Qs.parse(location.search, {
   ignoreQueryPrefix: true,
 });
+username = username.toLowerCase();
+room = room.toLowerCase();
+console.log(username, room);
 
 socket.on("message", (message) => {
   const html = Mustache.render(messageTemplate, {
@@ -78,4 +81,7 @@ socket.on("location", (coordinates) => {
   );
 });
 
-socket.emit("join", { username, room });
+socket.emit("join", { username, room }, (error) => {
+  alert(error);
+  location.href = "/";
+});

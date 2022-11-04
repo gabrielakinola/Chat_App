@@ -24,12 +24,17 @@ let count = 0;
 io.on("connection", (socket) => {
   console.log("New web socket connection");
 
-  socket.on("join", ({ username, room }) => {
-    socket.join(room);
+  socket.on("join", ({ username, room }, callback) => {
+    const { error, user } = addUser({ id: socket.id, username, room });
+    if (error) {
+      return callback(error);
+    }
+
+    socket.join(user.room);
     socket.emit("message", generateMessage("Welcome!"));
     socket.broadcast
-      .to(room)
-      .emit("message", generateMessage(`${username} has joined!`));
+      .to(user.room)
+      .emit("message", generateMessage(`${user.username} has joined!`));
   });
 
   socket.on("textMessage", (message, callback) => {
@@ -52,7 +57,13 @@ io.on("connection", (socket) => {
     callback("Location Shared!");
   });
   socket.on("disconnect", () => {
-    io.emit("message", "A user has left");
+    const user = removeUser(socket.id);
+    if (user) {
+      io.to(user.room).emit(
+        "message",
+        generateMessage(`${user.username} has left`)
+      );
+    }
   });
 });
 

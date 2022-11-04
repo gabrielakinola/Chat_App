@@ -82,6 +82,7 @@ const getUsersInRoom = (room) => {
   }
   return usersInRoom;
 };
+console.log(users);
 module.exports = {
   addUser,
   removeUser,
