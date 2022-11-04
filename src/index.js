@@ -2,20 +2,20 @@ const app = require("./app");
 const http = require("http");
 const Filter = require("bad-words");
 const socketio = require("socket.io");
+
 const port = process.env.PORT || 3000;
 const server = http.createServer(app);
+const { generateMessage, generateLocation } = require("./utils/messages");
 
 const io = socketio(server);
 
 let count = 0;
 
-const welcomeMsg = "Welcome!";
-
 io.on("connection", (socket) => {
   console.log("New web socket connection");
 
-  //socket.emit("welcomeMessage", welcomeMsg)
-  socket.broadcast.emit("message", "A new user has joined");
+  socket.emit("message", generateMessage("Welcome!"));
+  socket.broadcast.emit("message", generateMessage("A new user has joined"));
 
   socket.on("textMessage", (message, callback) => {
     const filter = new Filter();
@@ -23,14 +23,16 @@ io.on("connection", (socket) => {
     if (filter.isProfane(message)) {
       return callback("Profanity is not allowed!");
     }
-    io.emit("message", message);
+    io.emit("message", generateMessage(message));
     callback("Message Delivered!");
   });
 
   socket.on("sendLocation", (coords, callback) => {
     io.emit(
       "locationMessage",
-      `https://google.com/maps?q=${coords.latitude},${coords.longitude}`
+      generateLocation(
+        `https://google.com/maps?q=${coords.latitude},${coords.longitude}`
+      )
     );
     callback("Location Shared!");
   });
