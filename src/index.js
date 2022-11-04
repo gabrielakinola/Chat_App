@@ -6,16 +6,31 @@ const socketio = require("socket.io");
 const port = process.env.PORT || 3000;
 const server = http.createServer(app);
 const { generateMessage, generateLocation } = require("./utils/messages");
+const {
+  addUser,
+  removeUser,
+  getUser,
+  getUsersInRoom,
+} = require("./utils/users");
 
 const io = socketio(server);
 
 let count = 0;
 
+//socket methods
+//socke.emit, io.emit, socket.broadcast.emit, socket.join
+//io.to.emit, socekt.broadcast.to.emit
+
 io.on("connection", (socket) => {
   console.log("New web socket connection");
 
-  socket.emit("message", generateMessage("Welcome!"));
-  socket.broadcast.emit("message", generateMessage("A new user has joined"));
+  socket.on("join", ({ username, room }) => {
+    socket.join(room);
+    socket.emit("message", generateMessage("Welcome!"));
+    socket.broadcast
+      .to(room)
+      .emit("message", generateMessage(`${username} has joined!`));
+  });
 
   socket.on("textMessage", (message, callback) => {
     const filter = new Filter();
@@ -23,7 +38,7 @@ io.on("connection", (socket) => {
     if (filter.isProfane(message)) {
       return callback("Profanity is not allowed!");
     }
-    io.emit("message", generateMessage(message));
+    io.to("South Philly").emit("message", generateMessage(message));
     callback("Message Delivered!");
   });
 
