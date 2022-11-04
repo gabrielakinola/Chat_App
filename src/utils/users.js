@@ -31,23 +31,23 @@ const addUser = ({ id, username, room }) => {
   return { user };
 };
 
-addUser({
-  id: 22,
-  username: "Gabby",
-  room: "South Philly",
-});
+// addUser({
+//   id: 22,
+//   username: "Gabby",
+//   room: "South Philly",
+// });
 
-addUser({
-  id: 25,
-  username: "Angela",
-  room: "Atlanta",
-});
+// addUser({
+//   id: 25,
+//   username: "Angela",
+//   room: "Atlanta",
+// });
 
-addUser({
-  id: 27,
-  username: "Bukky",
-  room: "New york",
-});
+// addUser({
+//   id: 27,
+//   username: "Bukky",
+//   room: "New york",
+// });
 
 const removeUser = (id) => {
   const index = users.findIndex((user) => {
@@ -82,7 +82,7 @@ const getUsersInRoom = (room) => {
   }
   return usersInRoom;
 };
-console.log(users);
+// console.log(users);
 module.exports = {
   addUser,
   removeUser,

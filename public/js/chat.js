@@ -20,6 +20,7 @@ console.log(username, room);
 
 socket.on("message", (message) => {
   const html = Mustache.render(messageTemplate, {
+    username: message.username,
     message: message.text,
     createdAt: moment(message.createdAt).format("h:mm a"),
   });
@@ -28,6 +29,7 @@ socket.on("message", (message) => {
 
 socket.on("locationMessage", (url) => {
   const html = Mustache.render(locationTemplate, {
+    username: url.username,
     url: url.location,
     createdAt: moment(url.createdAt).format("h:mm a"),
   });
@@ -42,7 +44,7 @@ $messageForm.addEventListener("submit", (e) => {
   const message = document.querySelector("#message").value;
 
   //console.log(message);
-  socket.emit("textMessage", message, (error) => {
+  socket.emit("sendMessage", message, (error) => {
     $messageFormButton.removeAttribute("disabled");
     $messageFormInput.value = "";
     $messageFormInput.focus();

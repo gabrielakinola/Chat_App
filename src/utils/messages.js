@@ -1,11 +1,12 @@
-const generateMessage = (text) => {
+const generateMessage = (username = "admin", text) => {
   return {
+    username,
     text,
     createdAt: new Date().getTime(),
   };
 };
 
-const generateLocation = (location) => {
-  return { location, createdAt: new Date().getTime };
+const generateLocation = (username, location) => {
+  return { username, location, createdAt: new Date().getTime };
 };
 module.exports = { generateMessage, generateLocation };
