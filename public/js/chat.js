@@ -22,6 +22,7 @@ console.log(username, room);
 // const autoscroll = () => {
 //   //New message element
 //   const $newMessage = $messages.lastElementChild;
+//Uncomment this later
 
 //   //Height of the new message
 //   const newMessageStyles = getComputedStyle($newMessage);
